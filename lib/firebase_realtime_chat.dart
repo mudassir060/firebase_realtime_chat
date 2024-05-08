@@ -1,6 +1,6 @@
 library firebase_realtime_chat;
 
-// export '/date_time_piker/time_piker.dart';
+export 'views/group_chat/group_chat_view.dart';
 
 /// A Calculator.
 class Calculator {
