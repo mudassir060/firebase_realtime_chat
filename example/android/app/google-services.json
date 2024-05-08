@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "143631754060",
+    "project_id": "citizenscience-ffb5c",
+    "storage_bucket": "citizenscience-ffb5c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143631754060:android:7c56f34f9739dc3ab525e9",
+        "android_client_info": {
+          "package_name": "com.example.citizen_science"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWpp9q8HB3nteD8zcijgCZ2NBzDljteII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143631754060:android:435cb11d0b45362fb525e9",
+        "android_client_info": {
+          "package_name": "com.example.example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWpp9q8HB3nteD8zcijgCZ2NBzDljteII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143631754060:android:b440682bfeadca02b525e9",
+        "android_client_info": {
+          "package_name": "com.shaheendevs.citizen_science"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWpp9q8HB3nteD8zcijgCZ2NBzDljteII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
