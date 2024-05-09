@@ -1,6 +1,6 @@
 library firebase_realtime_chat;
 
-export 'views/group_chat/group_chat_view.dart';
+export 'views/community_chat_room/community_chat_room_view.dart';
 
 /// A Calculator.
 class Calculator {

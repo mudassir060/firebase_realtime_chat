@@ -1,16 +1,17 @@
-import 'package:firebase_realtime_chat/views/group_chat/group_chat_model.dart';
+import 'package:firebase_realtime_chat/views/community_chat_room/community_chat_room_model.dart';
 import 'package:firebase_realtime_chat/model/chat_messages.dart';
 import 'package:firebase_realtime_chat/views/image_view/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ChatRoomBubbles extends ViewModelWidget<GroupChatViewModel> {
+class CommunityChatRoomBubbles
+    extends ViewModelWidget<CommunityChatRoomViewModel> {
   final ChatMessage message;
   final String currentUserUID;
   final String defaultImage;
 
-  const ChatRoomBubbles({
+  const CommunityChatRoomBubbles({
     Key? key,
     required this.message,
     required this.currentUserUID,
@@ -20,7 +21,7 @@ class ChatRoomBubbles extends ViewModelWidget<GroupChatViewModel> {
   @override
   Widget build(
     BuildContext context,
-    GroupChatViewModel viewModel,
+    CommunityChatRoomViewModel viewModel,
   ) {
     final bool isCurrentUserMessage =
         message.authorId == viewModel.userData?.userId;

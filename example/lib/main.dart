@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: ChatRoomView(
+      home: CommunityChatRoomView(
         userData: UserModel(
           userId: "xyz",
           email: "xyz@gmail.com",

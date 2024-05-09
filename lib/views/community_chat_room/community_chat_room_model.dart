@@ -6,9 +6,9 @@ import 'package:stacked/stacked.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class GroupChatViewModel extends BaseViewModel {
+class CommunityChatRoomViewModel extends BaseViewModel {
   final CollectionReference _chatRoomCollection =
-      FirebaseFirestore.instance.collection('GroupChat');
+      FirebaseFirestore.instance.collection('CommunityChatRoom');
 
   TextEditingController messageController = TextEditingController();
   late Stream<QuerySnapshot> messagesStream = const Stream.empty();
@@ -24,8 +24,14 @@ class GroupChatViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  sentImage() async {
-    String image = await pickImage('GroupChat', ImageSource.gallery);
+  sentCameraImage() async {
+    String image = await pickImage('CommunityChatRoom', ImageSource.camera);
+    sendMessage(url: image);
+    notifyListeners();
+  }
+
+  sentGalleryImage() async {
+    String image = await pickImage('CommunityChatRoom', ImageSource.gallery);
     sendMessage(url: image);
     notifyListeners();
   }
