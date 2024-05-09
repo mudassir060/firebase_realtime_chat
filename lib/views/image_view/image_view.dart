@@ -5,9 +5,13 @@ import 'package:stacked/stacked.dart';
 
 class ImageView extends StackedView<ImageViewModel> {
   final String url;
-  final bool downloadButtonShow;
-  const ImageView({Key? key, required this.url, this.downloadButtonShow = true})
-      : super(key: key);
+  final bool imageDownloadButton;
+
+  const ImageView({
+    Key? key,
+    required this.url,
+    required this.imageDownloadButton,
+  }) : super(key: key);
 
   @override
   Widget builder(
@@ -21,7 +25,7 @@ class ImageView extends StackedView<ImageViewModel> {
           PhotoView(
             imageProvider: NetworkImage(url),
           ),
-          if (downloadButtonShow)
+          if (imageDownloadButton)
             Positioned(
               top: 50,
               right: 20,

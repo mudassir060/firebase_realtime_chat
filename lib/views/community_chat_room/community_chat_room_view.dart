@@ -13,6 +13,10 @@ class CommunityChatRoomView extends StatelessWidget {
   final String defaultImage;
   final AppBar? appBar;
   final Color iconColor;
+  final int imageQuality;
+  final bool imageDownloadButton;
+  final Color ownerBubbleColor;
+  final Color otherBubbleColor;
   const CommunityChatRoomView({
     Key? key,
     required this.userData,
@@ -21,6 +25,10 @@ class CommunityChatRoomView extends StatelessWidget {
         "https://github.com/mudassir060/firebase_realtime_chat/blob/main/assets/profile.jpeg?raw=true",
     this.appBar,
     this.iconColor = Colors.grey,
+    this.imageQuality = 25,
+    this.imageDownloadButton = false,
+    this.ownerBubbleColor = const Color.fromARGB(255, 199, 249, 245),
+    this.otherBubbleColor = const Color.fromARGB(255, 250, 236, 193),
   }) : super(key: key);
 
   @override
@@ -62,6 +70,9 @@ class CommunityChatRoomView extends StatelessWidget {
                             message: data,
                             currentUserUID: userData.userId,
                             defaultImage: defaultImage,
+                            imageDownloadButton: imageDownloadButton,
+                            ownerBubbleColor: ownerBubbleColor,
+                            otherBubbleColor: otherBubbleColor,
                           );
                         }).toList(),
                       );
@@ -73,23 +84,30 @@ class CommunityChatRoomView extends StatelessWidget {
                   child: Textfield(
                     title: "Type a message...",
                     ctrl: viewModel.messageController,
+                    borderColor: textFieldBorderColor,
                     onChanged: viewModel.onChanged,
                     sufixIcon: viewModel.messageController.text.isNotEmpty
                         ? GestureDetector(
                             onTap: viewModel.sendMessage,
-                            child: const Icon(Icons.send, size: 18),
+                            child: Icon(Icons.send, size: 18, color: iconColor),
                           )
                         : Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               GestureDetector(
-                                onTap: viewModel.sentGalleryImage,
-                                child: const Icon(Icons.attach_file, size: 25),
+                                onTap: () {
+                                  viewModel.sentGalleryImage(imageQuality);
+                                },
+                                child: Icon(Icons.attach_file,
+                                    size: 25, color: iconColor),
                               ),
                               const SizedBox(width: 10),
                               GestureDetector(
-                                onTap: viewModel.sentCameraImage,
-                                child: const Icon(Icons.camera_alt, size: 28),
+                                onTap: () {
+                                  viewModel.sentCameraImage(imageQuality);
+                                },
+                                child: Icon(Icons.camera_alt,
+                                    size: 28, color: iconColor),
                               ),
                               const SizedBox(width: 10),
                             ],

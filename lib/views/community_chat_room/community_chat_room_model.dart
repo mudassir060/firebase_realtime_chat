@@ -24,14 +24,16 @@ class CommunityChatRoomViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  sentCameraImage() async {
-    String image = await pickImage('CommunityChatRoom', ImageSource.camera);
+  sentCameraImage(int imageQuality) async {
+    String image =
+        await pickImage('CommunityChatRoom', ImageSource.camera, imageQuality);
     sendMessage(url: image);
     notifyListeners();
   }
 
-  sentGalleryImage() async {
-    String image = await pickImage('CommunityChatRoom', ImageSource.gallery);
+  sentGalleryImage(int imageQuality) async {
+    String image =
+        await pickImage('CommunityChatRoom', ImageSource.gallery, imageQuality);
     sendMessage(url: image);
     notifyListeners();
   }
@@ -39,10 +41,10 @@ class CommunityChatRoomViewModel extends BaseViewModel {
   Future<void> sendMessage({String url = ''}) async {
     ChatMessage dummyMessage = ChatMessage(
       text: messageController.text,
-      authorId: userData?.userId ?? "",
+      ownerId: userData?.userId ?? "",
       createdOn: DateTime.now(),
-      authorName: userData?.name ?? "",
-      authorProfile: userData?.profile ?? "",
+      ownerName: userData?.name ?? "",
+      ownerProfile: userData?.profile ?? "",
       url: url,
     );
     String messageText = messageController.text.trim();

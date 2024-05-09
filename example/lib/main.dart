@@ -21,6 +21,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: CommunityChatRoomView(
+        // imageDownloadButton: true,
+        // iconColor: Colors.green,
+        // textFieldBorderColor: Colors.green,
+        // ownerBubbleColor: const Color.fromARGB(255, 222, 197, 160),
+        // otherBubbleColor: Color.fromARGB(255, 146, 202, 210),
         userData: UserModel(
           userId: "xyz",
           email: "xyz@gmail.com",

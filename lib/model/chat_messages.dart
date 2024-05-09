@@ -2,18 +2,18 @@ class ChatMessage {
   final String? id;
   final String text;
   final String url;
-  final String authorId;
-  final String authorName;
-  final String authorProfile;
+  final String ownerId;
+  final String ownerName;
+  final String ownerProfile;
   final DateTime createdOn;
 
   ChatMessage({
     this.id,
     required this.text,
     required this.url,
-    required this.authorId,
-    required this.authorName,
-    required this.authorProfile,
+    required this.ownerId,
+    required this.ownerName,
+    required this.ownerProfile,
     required this.createdOn,
   });
 
@@ -22,9 +22,9 @@ class ChatMessage {
       id: smsId,
       text: json['text'],
       url: json['url'] ?? "",
-      authorId: json['authorId'],
-      authorName: json['authorName'],
-      authorProfile: json['authorProfile'],
+      ownerId: json['ownerId'],
+      ownerName: json['ownerName'],
+      ownerProfile: json['ownerProfile'],
       createdOn: json['createdOn'].toDate(),
     );
   }
@@ -33,9 +33,9 @@ class ChatMessage {
     return {
       'text': text,
       'url': url,
-      'authorId': authorId,
-      'authorName': authorName,
-      'authorProfile': authorProfile,
+      'ownerId': ownerId,
+      'ownerName': ownerName,
+      'ownerProfile': ownerProfile,
       'createdOn': createdOn,
     };
   }

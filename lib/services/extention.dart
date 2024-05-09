@@ -10,8 +10,8 @@ String handleFirebaseStorageError(e) {
       return 'The storage quota has been exceeded.';
     case 'unauthenticated':
       return 'User is not authenticated.';
-    case 'unauthorized':
-      return 'User is not authorized to perform this action.';
+    case 'unownerized':
+      return 'User is not ownerized to perform this action.';
     case 'retry-limit-exceeded':
       return 'Retry limit exceeded for the operation.';
     case 'non-retryable-error':

@@ -12,9 +12,10 @@ sentGroupImage({
   required String userId,
   required String name,
   required String profile,
+  int imageQuality = 25,
   ImageSource source = ImageSource.camera,
 }) async {
-  String image = await pickImage('CommunityChatRoom', source);
+  String image = await pickImage('CommunityChatRoom', source, imageQuality);
   sendMessage(url: image, userId: userId, name: name, profile: profile);
 }
 
@@ -36,10 +37,10 @@ Future<void> sendMessage({
 }) async {
   ChatMessage dummyMessage = ChatMessage(
     text: messageText,
-    authorId: userId,
+    ownerId: userId,
     createdOn: DateTime.now(),
-    authorName: name,
-    authorProfile: profile,
+    ownerName: name,
+    ownerProfile: profile,
     url: url,
   );
   if (messageText.isNotEmpty || url.isNotEmpty) {
