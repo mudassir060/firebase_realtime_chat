@@ -1,13 +1,14 @@
 import 'package:firebase_realtime_chat/model/chat_messages.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
 import 'package:firebase_realtime_chat/services/image_picker_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GroupChatViewModel extends BaseViewModel {
   final CollectionReference _chatRoomCollection =
-      FirebaseFirestore.instance.collection('ChatRooms');
+      FirebaseFirestore.instance.collection('GroupChat');
 
   TextEditingController messageController = TextEditingController();
   late Stream<QuerySnapshot> messagesStream = const Stream.empty();
@@ -24,7 +25,7 @@ class GroupChatViewModel extends BaseViewModel {
   }
 
   sentImage() async {
-    String image = await pickImage('GroupChat');
+    String image = await pickImage('GroupChat', ImageSource.gallery);
     sendMessage(url: image);
     notifyListeners();
   }
@@ -44,9 +45,33 @@ class GroupChatViewModel extends BaseViewModel {
       await messageRef.set(dummyMessage.toJson());
     }
     messageController.clear();
+    notifyListeners();
   }
 
-  navigateToImageView(url) {
-    // _navigationService.navigateToImageView(url: url);
+  void showDeleteConfirmation(BuildContext context, String messageId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Message"),
+          content: const Text("Are you sure you want to delete this message?"),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Delete"),
+              onPressed: () {
+                _chatRoomCollection.doc(messageId).delete();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

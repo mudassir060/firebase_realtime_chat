@@ -1,4 +1,3 @@
-
 String handleFirebaseStorageError(e) {
   switch (e.code) {
     case 'object-not-found':

@@ -10,12 +10,15 @@ import 'package:stacked/stacked.dart';
 class ChatRoomView extends StatelessWidget {
   final UserModel userData;
   final Color textFieldBorderColor;
-  final String profileAssetsImage;
+  final String defaultImage;
+  final AppBar? appBar;
   const ChatRoomView({
     Key? key,
     required this.userData,
     this.textFieldBorderColor = Colors.blue,
-    required this.profileAssetsImage,
+    this.defaultImage =
+        "https://github.com/mudassir060/firebase_realtime_chat/blob/main/assets/profile.jpeg?raw=true",
+    this.appBar,
   }) : super(key: key);
 
   @override
@@ -25,10 +28,11 @@ class ChatRoomView extends StatelessWidget {
       onViewModelReady: (viewModel) => viewModel.onViewModelReady(userData),
       builder: (context, viewModel, child) {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Firebase Realtime Chat"),
-          ),
+          appBar: appBar ??
+              AppBar(
+                centerTitle: true,
+                title: const Text("Firebase Realtime Chat"),
+              ),
           body: SafeArea(
             child: Column(
               children: [
@@ -50,11 +54,12 @@ class ChatRoomView extends StatelessWidget {
                         children: snapshot.data!.docs
                             .map((DocumentSnapshot document) {
                           ChatMessage data = ChatMessage.fromJson(
-                              document.data()! as Map<String, dynamic>);
+                              document.data()! as Map<String, dynamic>,
+                              document.id);
                           return ChatRoomBubbles(
                             message: data,
                             currentUserUID: userData.userId,
-                            profileAssetsImage: profileAssetsImage,
+                            defaultImage: defaultImage,
                           );
                         }).toList(),
                       );

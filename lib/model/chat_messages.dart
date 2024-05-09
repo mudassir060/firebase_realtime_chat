@@ -1,4 +1,5 @@
 class ChatMessage {
+  final String? id;
   final String text;
   final String url;
   final String authorId;
@@ -7,6 +8,7 @@ class ChatMessage {
   final DateTime createdOn;
 
   ChatMessage({
+    this.id,
     required this.text,
     required this.url,
     required this.authorId,
@@ -15,8 +17,9 @@ class ChatMessage {
     required this.createdOn,
   });
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+  factory ChatMessage.fromJson(Map<String, dynamic> json, String smsId) {
     return ChatMessage(
+      id: smsId,
       text: json['text'],
       url: json['url'] ?? "",
       authorId: json['authorId'],

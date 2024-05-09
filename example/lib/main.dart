@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
           profile:
               "https://buffer.com/library/content/images/2023/10/free-images.jpg",
         ),
-        profileAssetsImage: "assets/images/profile.jpeg",
       ),
     );
   }
