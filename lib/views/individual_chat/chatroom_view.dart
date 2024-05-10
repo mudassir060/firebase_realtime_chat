@@ -15,21 +15,12 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
   final Color iconColor;
   final Color textFieldBorderColor;
   final int imageQuality;
-  //   final UserModel userData;
-  // final String defaultImage;
-  // final AppBar? appBar;
-  // final bool imageDownloadButton;
-  // final Color ownerBubbleColor;
-  // final Color otherBubbleColor;
-  // const CommunityChatRoomView({
-  //   Key? key,
-  //   required this.userData,
-  //   this.defaultImage =
-  //       "https://github.com/mudassir060/firebase_realtime_chat/blob/main/assets/profile.jpeg?raw=true",
-  //   this.appBar,
-  //   this.imageDownloadButton = false,
-  //   this.ownerBubbleColor = const Color.fromARGB(255, 199, 249, 245),
-  //   this.otherBubbleColor = const Color.fromARGB(255, 250, 236, 193),
+  final String defaultImage;
+  final AppBar? appBar;
+  final bool imageDownloadButton;
+  final Color ownerBubbleColor;
+  final Color otherBubbleColor;
+
   const ChatRoomView({
     Key? key,
     required this.senderMember,
@@ -38,6 +29,12 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
     this.iconColor = Colors.grey,
     this.textFieldBorderColor = Colors.blue,
     this.imageQuality = 25,
+    this.defaultImage =
+        "https://github.com/mudassir060/firebase_realtime_chat/blob/main/assets/profile.jpeg?raw=true",
+    this.appBar,
+    this.imageDownloadButton = false,
+    this.ownerBubbleColor = const Color.fromARGB(255, 199, 249, 245),
+    this.otherBubbleColor = const Color.fromARGB(255, 250, 236, 193),
   }) : super(key: key);
 
   @override
@@ -50,79 +47,90 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          senderMember.name,
+          receiverMember.name,
           style: const TextStyle(color: Colors.black),
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('ChatRooms')
-                  .doc(mergeStrings(senderMember.userId, receiverMember.userId))
-                  .collection('Messages')
-                  .orderBy('createdOn', descending: true)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return const Text('Something went wrong');
-                }
-                return ListView(
-                  reverse: true,
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                    ChatMessage data = ChatMessage.fromJson(
-                        document.data()! as Map<String, dynamic>);
-                    return ChatRoomBubbles(
-                      uID: senderMember.userId,
-                      message: data,
+          Column(
+            children: [
+              Expanded(
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('ChatRooms')
+                      .doc(mergeStrings(
+                          senderMember.userId, receiverMember.userId))
+                      .collection('Messages')
+                      .orderBy('createdOn', descending: true)
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    return ListView(
+                      reverse: true,
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                        ChatMessage data = ChatMessage.fromJson(
+                            document.data()! as Map<String, dynamic>);
+                        return ChatRoomBubbles(
+                          message: data,
+                          currentUserUID: senderMember.userId,
+                          defaultImage: defaultImage,
+                          imageDownloadButton: imageDownloadButton,
+                          ownerBubbleColor: ownerBubbleColor,
+                          otherBubbleColor: otherBubbleColor,
+                        );
+                      }).toList(),
                     );
-                  }).toList(),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Textfield(
-              title: "Type a message...",
-              ctrl: viewModel.messageController,
-              borderColor: textFieldBorderColor,
-              onChanged: viewModel.onChanged,
-              sufixIcon: viewModel.messageController.text.isNotEmpty
-                  ? GestureDetector(
-                      onTap: viewModel.sendDummyMessage,
-                      child: Icon(Icons.send, size: 18, color: iconColor),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            viewModel.sentGalleryImage(imageQuality);
-                          },
-                          child: Icon(Icons.attach_file,
-                              size: 25, color: iconColor),
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Textfield(
+                  title: "Type a message...",
+                  ctrl: viewModel.messageController,
+                  borderColor: textFieldBorderColor,
+                  onChanged: viewModel.onChanged,
+                  sufixIcon: viewModel.messageController.text.isNotEmpty
+                      ? GestureDetector(
+                          onTap: viewModel.sendDummyMessage,
+                          child: Icon(Icons.send, size: 18, color: iconColor),
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                viewModel.sentGalleryImage(imageQuality);
+                              },
+                              child: Icon(Icons.attach_file,
+                                  size: 25, color: iconColor),
+                            ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                viewModel.sentCameraImage(imageQuality);
+                              },
+                              child: Icon(Icons.camera_alt,
+                                  size: 28, color: iconColor),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
                         ),
-                        const SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () {
-                            viewModel.sentCameraImage(imageQuality);
-                          },
-                          child: Icon(Icons.camera_alt,
-                              size: 28, color: iconColor),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
-                    ),
-            ),
+                ),
+              ),
+            ],
           ),
+          if (viewModel.isBusy)
+            const Center(child: CircularProgressIndicator()),
         ],
       ),
     );

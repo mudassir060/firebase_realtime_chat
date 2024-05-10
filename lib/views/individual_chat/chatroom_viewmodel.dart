@@ -29,17 +29,39 @@ class ChatRoomViewModel extends BaseViewModel {
   }
 
   sentCameraImage(int imageQuality) async {
+    setBusy(true);
     String image =
         await pickImage('CommunityChatRoom', ImageSource.camera, imageQuality);
-    // sendMessage(url: image);
-    notifyListeners();
+    sentFile(url: image);
+    setBusy(false);
   }
 
   sentGalleryImage(int imageQuality) async {
+    setBusy(true);
     String image =
         await pickImage('CommunityChatRoom', ImageSource.gallery, imageQuality);
-    // sendMessage(url: image);
-    notifyListeners();
+    sentFile(url: image);
+    setBusy(false);
+  }
+
+  sentFile({required String url}) async {
+    ChatMessage message = ChatMessage(
+      url: url,
+      authorId: senderMember?.userId ?? "",
+      createdOn: DateTime.now(),
+      type: "image",
+    );
+    ChatRoom chatRoom = ChatRoom(
+      membersId: [senderMember?.userId ?? "", receiverMember?.userId ?? ""],
+      lastMessage: message,
+      members: {
+        'senderId': senderMember!,
+        'receiverId': receiverMember!,
+      },
+      createdOn: DateTime.now(),
+    );
+
+    await startChatRoom(message, chatRoom);
   }
 
   Future<void> sendDummyMessage() async {
@@ -58,9 +80,10 @@ class ChatRoomViewModel extends BaseViewModel {
       },
       createdOn: DateTime.now(),
     );
-
-    await startChatRoom(dummyMessage, dummyChatRoom);
-    messageController.clear();
+    if (messageController.text.isNotEmpty) {
+      await startChatRoom(dummyMessage, dummyChatRoom);
+      messageController.clear();
+    }
   }
 
   Future<String> startChatRoom(ChatMessage message, ChatRoom chatRoom) async {
@@ -73,14 +96,41 @@ class ChatRoomViewModel extends BaseViewModel {
   }
 
   Future<void> sendMessage(ChatMessage message, String chatRoomId) async {
-    String messageText = messageController.text;
-    if (messageText.isNotEmpty) {
-      DocumentReference roomRef =
-          _firestore.collection('ChatRooms').doc(chatRoomId);
-      DocumentReference messageRef = roomRef.collection('Messages').doc();
-      await messageRef.set(message.toJson());
-      messageController.clear();
-      notifyListeners();
-    }
+    DocumentReference roomRef =
+        _firestore.collection('ChatRooms').doc(chatRoomId);
+    DocumentReference messageRef = roomRef.collection('Messages').doc();
+    await messageRef.set(message.toJson());
+    messageController.clear();
+    notifyListeners();
+  }
+
+  void showDeleteConfirmation(BuildContext context, String messageId) {
+    DocumentReference roomRef = _firestore.collection('ChatRooms').doc(
+        mergeStrings(senderMember?.userId ?? "", receiverMember?.userId ?? ""));
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Message"),
+          content: const Text("Are you sure you want to delete this message?"),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Delete"),
+              onPressed: () {
+                roomRef.collection('Messages').doc(messageId).delete();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

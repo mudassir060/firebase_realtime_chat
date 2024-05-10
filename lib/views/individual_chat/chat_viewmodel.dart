@@ -2,8 +2,6 @@ import 'dart:developer';
 import 'package:firebase_realtime_chat/model/chat_room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
-import 'package:firebase_realtime_chat/views/individual_chat/chatroom_view.dart';
-import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class ChatViewModel extends BaseViewModel {
@@ -28,7 +26,7 @@ class ChatViewModel extends BaseViewModel {
           try {
             chatRooms.add(ChatRoom.fromJson(data, doc.id));
           } catch (e) {
-            log("${doc.reference.path} ==-=-=-=$e");
+            log("${doc.reference.path} $e");
           }
         }
         yield chatRooms;
@@ -38,14 +36,16 @@ class ChatViewModel extends BaseViewModel {
     }
   }
 
-  navigateToChatRoomView(
-      UserModel senderMember, UserModel receiverMember, BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChatRoomView(
-            senderMember: senderMember, receiverMember: receiverMember),
-      ),
-    );
-  }
+  // navigateToChatRoomView(
+  //     UserModel senderMember, UserModel receiverMember, BuildContext context) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => ChatRoomView(
+  //           senderMember: senderMember,
+  //           receiverMember: receiverMember,
+  //           userData: userData!),
+  //     ),
+  //   );
+  // }
 }

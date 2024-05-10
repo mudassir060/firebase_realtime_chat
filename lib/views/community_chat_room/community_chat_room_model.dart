@@ -81,5 +81,5 @@ class CommunityChatRoomViewModel extends BaseViewModel {
         );
       },
     );
-  }
 }
+  }

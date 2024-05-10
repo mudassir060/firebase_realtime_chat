@@ -1,9 +1,9 @@
+import 'package:firebase_realtime_chat/services/extention.dart';
 import 'package:firebase_realtime_chat/views/community_chat_room/community_chat_room_model.dart';
 import 'package:firebase_realtime_chat/model/chat_messages.dart';
 import 'package:firebase_realtime_chat/views/image_view/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class CommunityChatRoomBubbles
     extends ViewModelWidget<CommunityChatRoomViewModel> {
@@ -120,12 +120,12 @@ class CommunityChatRoomBubbles
                       ),
                     const SizedBox(height: 1.0),
                     Text(
-                      timeago.format(message.createdOn),
+                      timeAgo(message.createdOn),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 10,
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
