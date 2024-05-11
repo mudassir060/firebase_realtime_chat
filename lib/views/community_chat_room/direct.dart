@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 final CollectionReference _chatRoomCollection =
     FirebaseFirestore.instance.collection('CommunityChatRoom');
 
-sentGroupImage({
+sentCommunityImage({
   required String userId,
   required String name,
   required String profile,
@@ -16,19 +16,19 @@ sentGroupImage({
   ImageSource source = ImageSource.camera,
 }) async {
   String image = await pickImage('CommunityChatRoom', source, imageQuality);
-  sendMessage(url: image, userId: userId, name: name, profile: profile);
+  sendCommunityMessage(url: image, userId: userId, name: name, profile: profile);
 }
 
-sentGroupImageByFile(
+sentCommunityImageByFile(
     {required String userId,
     required String name,
     required String profile,
     required File file}) async {
   String image = await postImageOnFirebase('CommunityChatRoom', file);
-  sendMessage(url: image, userId: userId, name: name, profile: profile);
+  sendCommunityMessage(url: image, userId: userId, name: name, profile: profile);
 }
 
-Future<void> sendMessage({
+Future<void> sendCommunityMessage({
   String messageText = "",
   String url = '',
   required String userId,
