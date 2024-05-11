@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class Textfield extends StatefulWidget {
   final Widget? sufixIcon;
+  final Widget? prefixIcon;
+
   final bool? obscureText;
   final String? title;
   final String? borderTitle;
@@ -10,17 +12,20 @@ class Textfield extends StatefulWidget {
   final TextEditingController? ctrl;
   final TextInputType? keyboardType;
   final Function(String)? onChanged;
+  final FocusNode? focusNode;
   const Textfield({
     Key? key,
     this.title,
     this.ctrl,
     this.obscureText,
     this.sufixIcon,
+    this.prefixIcon,
     this.borderColor = Colors.blue,
     this.borderTitle,
     this.maxLines,
     this.keyboardType,
     this.onChanged,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -41,6 +46,7 @@ class _TextfieldState extends State<Textfield> {
               controller: widget.ctrl,
               maxLines: widget.maxLines ?? 1,
               keyboardType: widget.keyboardType,
+              focusNode: widget.focusNode,
               onChanged: (value) {
                 if (widget.onChanged != null) {
                   widget.onChanged!(value);
@@ -55,6 +61,7 @@ class _TextfieldState extends State<Textfield> {
                 border: InputBorder.none,
                 alignLabelWithHint: true,
                 suffixIcon: widget.sufixIcon,
+                prefixIcon: widget.prefixIcon,
               ),
             )
           : Row(

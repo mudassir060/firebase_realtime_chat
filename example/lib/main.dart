@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       //   userData: user2,
       // ),
       // home: OpenChatRoomView(),
-      home: ChatView(userData: otherUser),
+      home: ChatView(userData: user1),
     );
   }
 }
@@ -76,7 +76,7 @@ class _OpenChatRoomViewState extends State<OpenChatRoomView> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChatRoomView(
-                    smsText: "",
+                    imageDownloadButton: true,
                     senderMember: otherUser,
                     receiverMember: user1,
                   ),

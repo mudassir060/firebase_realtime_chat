@@ -2,8 +2,10 @@ import 'package:firebase_realtime_chat/model/chat_room.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chat_viewmodel.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chatroom_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class ChatView extends StackedView<ChatViewModel> {
   final Color iconColor;
@@ -84,7 +86,8 @@ class ChatView extends StackedView<ChatViewModel> {
                         );
                       },
                       child: Card(
-                        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 10),
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage((viewModel
@@ -106,7 +109,13 @@ class ChatView extends StackedView<ChatViewModel> {
                               ),
                               Text(
                                 maxLines: 1,
-                                chatRoom.lastMessage?.text ?? "",
+                                ((chatRoom.lastMessage?.text ?? "").isNotEmpty
+                                        ? chatRoom.lastMessage?.text
+                                        : (chatRoom.lastMessage?.url ?? "")
+                                                .isNotEmpty
+                                            ? "Image"
+                                            : "")
+                                    .toString(),
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(color: Colors.grey),
                               ),
@@ -120,7 +129,11 @@ class ChatView extends StackedView<ChatViewModel> {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
-                return const CircularProgressIndicator();
+                return Center(
+                  child: foundation.defaultTargetPlatform == TargetPlatform.iOS
+                      ? const CupertinoActivityIndicator()
+                      : const CircularProgressIndicator(),
+                );
               }
             },
           ),

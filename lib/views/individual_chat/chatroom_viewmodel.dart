@@ -16,6 +16,9 @@ class ChatRoomViewModel extends BaseViewModel {
   //     .collection('Messages');
   UserModel? senderMember;
   UserModel? receiverMember;
+  FocusNode focusNode = FocusNode();
+
+  bool isShowEmjois = false;
   TextEditingController messageController = TextEditingController();
   onViewModelReady(
       UserModel senderMember, UserModel receiverMember, String? smsText) {
@@ -64,6 +67,32 @@ class ChatRoomViewModel extends BaseViewModel {
     await startChatRoom(message, chatRoom);
   }
 
+  showEmojis() {
+    isShowEmjois = !isShowEmjois;
+    focusNode.unfocus();
+    notifyListeners();
+  }
+
+  sentEmojis(url) async {
+    ChatMessage message = ChatMessage(
+      url: url,
+      authorId: senderMember?.userId ?? "",
+      createdOn: DateTime.now(),
+      type: "emoji",
+    );
+    ChatRoom chatRoom = ChatRoom(
+      membersId: [senderMember?.userId ?? "", receiverMember?.userId ?? ""],
+      lastMessage: message,
+      members: {
+        'senderId': senderMember!,
+        'receiverId': receiverMember!,
+      },
+      createdOn: DateTime.now(),
+    );
+
+    await startChatRoom(message, chatRoom);
+  }
+
   Future<void> sendDummyMessage() async {
     ChatMessage dummyMessage = ChatMessage(
       text: messageController.text,
@@ -81,8 +110,8 @@ class ChatRoomViewModel extends BaseViewModel {
       createdOn: DateTime.now(),
     );
     if (messageController.text.isNotEmpty) {
-      await startChatRoom(dummyMessage, dummyChatRoom);
       messageController.clear();
+      await startChatRoom(dummyMessage, dummyChatRoom);
     }
   }
 
@@ -100,7 +129,6 @@ class ChatRoomViewModel extends BaseViewModel {
         _firestore.collection('ChatRooms').doc(chatRoomId);
     DocumentReference messageRef = roomRef.collection('Messages').doc();
     await messageRef.set(message.toJson());
-    messageController.clear();
     notifyListeners();
   }
 

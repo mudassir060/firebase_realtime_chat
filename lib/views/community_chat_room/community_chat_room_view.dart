@@ -2,10 +2,13 @@ import 'package:firebase_realtime_chat/views/community_chat_room/community_chat_
 import 'package:firebase_realtime_chat/views/community_chat_room/widgets/bubbles.dart';
 import 'package:firebase_realtime_chat/model/chat_messages.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
+import 'package:firebase_realtime_chat/widgets.dart/emoji.dart';
 import 'package:firebase_realtime_chat/widgets.dart/textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class CommunityChatRoomView extends StatelessWidget {
   final UserModel userData;
@@ -51,8 +54,11 @@ class CommunityChatRoomView extends StatelessWidget {
                     stream: viewModel.messagesStream,
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return Center(
+                          child: foundation.defaultTargetPlatform ==
+                                  TargetPlatform.iOS
+                              ? const CupertinoActivityIndicator()
+                              : const CircularProgressIndicator(),
                         );
                       }
                       if (snapshot.hasError) {
@@ -86,6 +92,12 @@ class CommunityChatRoomView extends StatelessWidget {
                     ctrl: viewModel.messageController,
                     borderColor: textFieldBorderColor,
                     onChanged: viewModel.onChanged,
+                    focusNode: viewModel.focusNode,
+                    prefixIcon: GestureDetector(
+                      onTap: viewModel.showEmojis,
+                      child: Icon(Icons.emoji_emotions_outlined,
+                          size: 32, color: iconColor),
+                    ),
                     sufixIcon: viewModel.messageController.text.isNotEmpty
                         ? GestureDetector(
                             onTap: viewModel.sendMessage,
@@ -114,6 +126,8 @@ class CommunityChatRoomView extends StatelessWidget {
                           ),
                   ),
                 ),
+                if (viewModel.isShowEmjois)
+                  EmojiKeyboard(onSelecte: viewModel.sentEmojis)
               ],
             ),
           ),

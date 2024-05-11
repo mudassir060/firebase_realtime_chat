@@ -3,6 +3,7 @@ import 'package:firebase_realtime_chat/services/extention.dart';
 import 'package:firebase_realtime_chat/views/image_view/image_view.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chatroom_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stacked/stacked.dart';
 
 class ChatRoomBubbles extends ViewModelWidget<ChatRoomViewModel> {
@@ -32,7 +33,9 @@ class ChatRoomBubbles extends ViewModelWidget<ChatRoomViewModel> {
 
     return GestureDetector(
       onLongPress: () {
-        viewModel.showDeleteConfirmation(context, message.id ?? "");
+        if (isCurrentUserMessage) {
+          viewModel.showDeleteConfirmation(context, message.id ?? "");
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6),
@@ -40,10 +43,13 @@ class ChatRoomBubbles extends ViewModelWidget<ChatRoomViewModel> {
           alignment: isCurrentUserMessage
               ? Alignment.centerRight
               : Alignment.centerLeft,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          child: Column(
             children: [
+              if (message.url.isNotEmpty &&
+                  message.url.substring(
+                          message.url.length - 4, message.url.length) ==
+                      "json")
+                Lottie.network(message.url, width: 100),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 6),
                 padding:
@@ -72,7 +78,7 @@ class ChatRoomBubbles extends ViewModelWidget<ChatRoomViewModel> {
                           color: Colors.black,
                         ),
                       ),
-                    if (message.url.isNotEmpty)
+                    if (message.url.isNotEmpty && message.type == "image")
                       GestureDetector(
                         onTap: () {
                           Navigator.push(

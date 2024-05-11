@@ -13,9 +13,19 @@ class CommunityChatRoomViewModel extends BaseViewModel {
   TextEditingController messageController = TextEditingController();
   late Stream<QuerySnapshot> messagesStream = const Stream.empty();
   UserModel? userData;
+  FocusNode focusNode = FocusNode();
+
+  bool isShowEmjois = false;
 
   onViewModelReady(UserModel userData) {
     this.userData = userData;
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        isShowEmjois = false;
+        notifyListeners();
+      }
+    });
+
     messagesStream =
         _chatRoomCollection.orderBy('createdOn', descending: true).snapshots();
   }
@@ -36,6 +46,16 @@ class CommunityChatRoomViewModel extends BaseViewModel {
         await pickImage('CommunityChatRoom', ImageSource.gallery, imageQuality);
     sendMessage(url: image);
     notifyListeners();
+  }
+
+  showEmojis() {
+    isShowEmjois = !isShowEmjois;
+    focusNode.unfocus();
+    notifyListeners();
+  }
+
+  sentEmojis(url) {
+    sendMessage(url: url);
   }
 
   Future<void> sendMessage({String url = ''}) async {
@@ -81,5 +101,5 @@ class CommunityChatRoomViewModel extends BaseViewModel {
         );
       },
     );
-}
   }
+}

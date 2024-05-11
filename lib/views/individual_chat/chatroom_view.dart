@@ -3,10 +3,13 @@ import 'package:firebase_realtime_chat/model/user.dart';
 import 'package:firebase_realtime_chat/services/extention.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chatroom_viewmodel.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/widgets/bubbles.dart';
+import 'package:firebase_realtime_chat/widgets.dart/emoji.dart';
 import 'package:firebase_realtime_chat/widgets.dart/textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class ChatRoomView extends StackedView<ChatRoomViewModel> {
   final String? smsText;
@@ -66,9 +69,11 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return  Center(
+              child: foundation.defaultTargetPlatform == TargetPlatform.iOS
+                  ? const CupertinoActivityIndicator()
+                  : const CircularProgressIndicator(),
+            );
                     }
                     if (snapshot.hasError) {
                       return const Text('Something went wrong');
@@ -99,6 +104,12 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
                   ctrl: viewModel.messageController,
                   borderColor: textFieldBorderColor,
                   onChanged: viewModel.onChanged,
+                        focusNode: viewModel.focusNode,
+                    prefixIcon: GestureDetector(
+                      onTap: viewModel.showEmojis,
+                      child: Icon(Icons.emoji_emotions_outlined,
+                          size: 32, color: iconColor),
+                    ),
                   sufixIcon: viewModel.messageController.text.isNotEmpty
                       ? GestureDetector(
                           onTap: viewModel.sendDummyMessage,
@@ -127,10 +138,17 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
                         ),
                 ),
               ),
+                     if (viewModel.isShowEmjois)
+                  EmojiKeyboard(onSelecte: viewModel.sentEmojis)
+          
             ],
           ),
           if (viewModel.isBusy)
-            const Center(child: CircularProgressIndicator()),
+            Center(
+              child: foundation.defaultTargetPlatform == TargetPlatform.iOS
+                  ? const CupertinoActivityIndicator()
+                  : const CircularProgressIndicator(),
+            ),
         ],
       ),
     );
