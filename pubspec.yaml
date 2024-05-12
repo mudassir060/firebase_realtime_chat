@@ -1,7 +1,7 @@
 name: firebase_realtime_chat
 description: "A new Flutter project."
 version: 0.0.1
-homepage:
+homepage: https://github.com/mudassir060/firebase_realtime_chat.git
 
 environment:
   sdk: '>=3.2.2 <4.0.0'
