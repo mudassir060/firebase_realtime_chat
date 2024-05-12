@@ -78,6 +78,9 @@ class CommunityChatRoomBubbles
                           "json")
                     Lottie.network(message.url, width: 100),
                   Container(
+                    constraints: BoxConstraints(
+                        minWidth: 50,
+                        maxWidth: MediaQuery.of(context).size.width - 100),
                     margin: const EdgeInsets.symmetric(horizontal: 6),
                     padding: const EdgeInsets.symmetric(
                         vertical: 6.0, horizontal: 10),
