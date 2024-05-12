@@ -16,7 +16,10 @@ sentCommunityImage({
   ImageSource source = ImageSource.camera,
 }) async {
   String image = await pickImage('CommunityChatRoom', source, imageQuality);
-  sendCommunityMessage(url: image, userId: userId, name: name, profile: profile);
+  if (image.isNotEmpty) {
+    sendCommunityMessage(
+        url: image, userId: userId, name: name, profile: profile);
+  }
 }
 
 sentCommunityImageByFile(
@@ -25,7 +28,11 @@ sentCommunityImageByFile(
     required String profile,
     required File file}) async {
   String image = await postImageOnFirebase('CommunityChatRoom', file);
-  sendCommunityMessage(url: image, userId: userId, name: name, profile: profile);
+
+  if (image.isNotEmpty) {
+    sendCommunityMessage(
+        url: image, userId: userId, name: name, profile: profile);
+  }
 }
 
 Future<void> sendCommunityMessage({

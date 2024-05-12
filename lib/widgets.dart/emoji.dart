@@ -24,7 +24,8 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
             children: emojis.map((emoji) {
               return GestureDetector(
                 onTap: () {
-                  widget.onSelecte('https://fonts.gstatic.com/s/e/notoemoji/latest/$emoji/lottie.json');
+                  widget.onSelecte(
+                      'https://fonts.gstatic.com/s/e/notoemoji/latest/$emoji/lottie.json');
                 },
                 child: Center(
                   child: Lottie.network(

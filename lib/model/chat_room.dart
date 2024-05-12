@@ -31,7 +31,7 @@ class ChatRoom {
         type = json['type'],
         subscriptionType = json['subscriptionType'],
         lastMessage = json['lastMessage'] != null
-            ? ChatMessage.fromJson(json['lastMessage'])
+            ? ChatMessage.fromJson(json['lastMessage'], "")
             : null,
         membersId = List<String>.from(json['membersId']),
         members = Map<String, UserModel>.from(

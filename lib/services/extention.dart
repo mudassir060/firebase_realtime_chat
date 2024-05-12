@@ -74,6 +74,7 @@ String timeAgo(DateTime d) {
   }
   return "just now";
 }
+
 String mergeStrings(String str1, String str2) {
   if (str1.compareTo(str2) >= 0) {
     return str1 + str2;

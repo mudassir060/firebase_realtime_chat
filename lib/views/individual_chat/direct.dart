@@ -16,7 +16,9 @@ sentGroupImage({
   ImageSource source = ImageSource.camera,
 }) async {
   String image = await pickImage('ChatRooms', source, imageQuality);
-  sendMessage(url: image, userId: userId, name: name, profile: profile);
+  if (image.isNotEmpty) {
+    sendMessage(url: image, userId: userId, name: name, profile: profile);
+  }
 }
 
 sentGroupImageByFile(
@@ -25,7 +27,9 @@ sentGroupImageByFile(
     required String profile,
     required File file}) async {
   String image = await postImageOnFirebase('ChatRooms', file);
-  sendMessage(url: image, userId: userId, name: name, profile: profile);
+  if (image.isNotEmpty) {
+    sendMessage(url: image, userId: userId, name: name, profile: profile);
+  }
 }
 
 Future<void> sendMessage({

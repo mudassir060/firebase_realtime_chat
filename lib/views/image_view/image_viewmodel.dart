@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:gallery_saver/gallery_saver.dart';
 
 class ImageViewModel extends BaseViewModel {
-
   Future<void> saveImage(BuildContext context, String imageUrl) async {
     var status = await Permission.storage.request();
     if (status.isGranted) {
@@ -38,7 +37,7 @@ class ImageViewModel extends BaseViewModel {
           'Permission is permanently denied. Please enable it from app settings.');
     } else {
       // openAppSettings();
-    await  Permission.storage.request();
+      await Permission.storage.request();
       showErrorSnake('Permission denied. Cannot save image.');
     }
   }

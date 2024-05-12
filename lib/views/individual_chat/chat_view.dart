@@ -1,5 +1,6 @@
 import 'package:firebase_realtime_chat/model/chat_room.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
+import 'package:firebase_realtime_chat/services/extention.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chat_viewmodel.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chatroom_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,99 +45,89 @@ class ChatView extends StackedView<ChatViewModel> {
             centerTitle: true,
             title: const Text("Firebase Realtime Individual Chat"),
           ),
-      body: Column(
+      body: Stack(
         children: [
-          StreamBuilder<List<ChatRoom>>(
-            stream: viewModel.getChatRoomsStream(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<ChatRoom> chatRooms = snapshot.data!;
-                return Column(
-                  children: chatRooms.map((chatRoom) {
-                    return InkWell(
-                      onTap: () {
-                        UserModel? otherUser =
-                            chatRoom.members["senderId"]?.userId ==
-                                    userData.userId
-                                ? chatRoom.members["receiverId"]
-                                : chatRoom.members["senderId"];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatRoomView(
-                              iconColor: iconColor,
-                              textFieldBorderColor: textFieldBorderColor,
-                              imageQuality: imageQuality,
-                              defaultImage: defaultImage,
-                              imageDownloadButton: imageDownloadButton,
-                              ownerBubbleColor: ownerBubbleColor,
-                              otherBubbleColor: otherBubbleColor,
-                              senderMember: UserModel(
-                                userId: userData.userId,
-                                name: userData.name,
-                                profile: userData.profile,
-                              ),
-                              receiverMember: UserModel(
-                                userId: otherUser?.userId ?? "",
-                                name: otherUser?.name ?? "",
-                                profile: otherUser?.profile ?? "",
-                              ),
-                            ),
+          ListView.builder(
+              itemCount: viewModel.chatRooms.length,
+              itemBuilder: (context, index) {
+                ChatRoom chatRoom = viewModel.chatRooms[index];
+                return InkWell(
+                  onTap: () {
+                    UserModel? otherUser =
+                        chatRoom.members["senderId"]?.userId == userData.userId
+                            ? chatRoom.members["receiverId"]
+                            : chatRoom.members["senderId"];
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatRoomView(
+                          iconColor: iconColor,
+                          textFieldBorderColor: textFieldBorderColor,
+                          imageQuality: imageQuality,
+                          defaultImage: defaultImage,
+                          imageDownloadButton: imageDownloadButton,
+                          ownerBubbleColor: ownerBubbleColor,
+                          otherBubbleColor: otherBubbleColor,
+                          senderMember: UserModel(
+                            userId: userData.userId,
+                            name: userData.name,
+                            profile: userData.profile,
                           ),
-                        );
-                      },
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 10),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage((viewModel
-                                            .userData?.userId !=
-                                        chatRoom.members["senderId"]?.userId
-                                    ? chatRoom.members["senderId"]?.profile
-                                    : chatRoom
-                                        .members["receiverId"]?.profile) ??
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUUfNCnMwMeh_5WuKXe55VTTVQcF1CN7Yb6Jw5TWYcngvaPF_z7yapb8o0PCoQMVv3UTs&usqp=CAU"),
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${userData.userId != chatRoom.members["senderId"]?.userId ? chatRoom.members["senderId"]?.name : chatRoom.members["receiverId"]?.name}",
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                maxLines: 1,
-                                ((chatRoom.lastMessage?.text ?? "").isNotEmpty
-                                        ? chatRoom.lastMessage?.text
-                                        : (chatRoom.lastMessage?.url ?? "")
-                                                .isNotEmpty
-                                            ? "Image"
-                                            : "")
-                                    .toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ],
+                          receiverMember: UserModel(
+                            userId: otherUser?.userId ?? "",
+                            name: otherUser?.name ?? "",
+                            profile: otherUser?.profile ?? "",
                           ),
                         ),
                       ),
                     );
-                  }).toList(),
+                  },
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage((viewModel
+                                        .userData?.userId !=
+                                    chatRoom.members["senderId"]?.userId
+                                ? chatRoom.members["senderId"]?.profile
+                                : chatRoom.members["receiverId"]?.profile) ??
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUUfNCnMwMeh_5WuKXe55VTTVQcF1CN7Yb6Jw5TWYcngvaPF_z7yapb8o0PCoQMVv3UTs&usqp=CAU"),
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${userData.userId != chatRoom.members["senderId"]?.userId ? chatRoom.members["senderId"]?.name : chatRoom.members["receiverId"]?.name}",
+                            style: const TextStyle(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            maxLines: 1,
+                            ((chatRoom.lastMessage?.text ?? "").isNotEmpty
+                                    ? chatRoom.lastMessage?.text
+                                    : (chatRoom.lastMessage?.url ?? "")
+                                            .isNotEmpty
+                                        ? chatRoom.lastMessage?.type
+                                        : "")
+                                .toString(),
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      trailing: Text(timeAgo(chatRoom.lastMessage!.createdOn)),
+                    ),
+                  ),
                 );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                return Center(
-                  child: foundation.defaultTargetPlatform == TargetPlatform.iOS
-                      ? const CupertinoActivityIndicator()
-                      : const CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
+              }),
+          if (viewModel.isBusy)
+            Center(
+              child: foundation.defaultTargetPlatform == TargetPlatform.iOS
+                  ? const CupertinoActivityIndicator()
+                  : const CircularProgressIndicator(),
+            ),
         ],
       ),
     );

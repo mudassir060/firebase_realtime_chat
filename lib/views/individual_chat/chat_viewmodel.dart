@@ -1,38 +1,42 @@
-import 'dart:developer';
 import 'package:firebase_realtime_chat/model/chat_room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_realtime_chat/model/response.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
 import 'package:stacked/stacked.dart';
 
 class ChatViewModel extends BaseViewModel {
   final _firestore = FirebaseFirestore.instance;
   UserModel? userData;
+  List<ChatRoom> chatRooms = [];
 
   onViewModelReady(UserModel userData) {
+    setBusy(true);
     this.userData = userData;
+    listenToChatRooms().data?.listen((event) {
+      chatRooms = event;
+      notifyListeners();
+    });
+    setBusy(false);
   }
 
-  Stream<List<ChatRoom>> getChatRoomsStream() async* {
+  ResponseModel<Stream<List<ChatRoom>>> listenToChatRooms() {
     try {
-      final result = _firestore
+      final stream = _firestore
           .collection('ChatRooms')
           .where('membersId', arrayContains: userData?.userId)
           .orderBy('lastMessage.createdOn', descending: true)
-          .snapshots();
-      await for (final event in result) {
-        final List<ChatRoom> chatRooms = List.empty(growable: true);
-        for (final doc in event.docs) {
-          final data = doc.data();
-          try {
-            chatRooms.add(ChatRoom.fromJson(data, doc.id));
-          } catch (e) {
-            log("${doc.reference.path} $e");
-          }
+          .snapshots()
+          .map((event) {
+        List<ChatRoom> products = [];
+        for (var item in event.docs) {
+          products.add(ChatRoom.fromJson(item.data(), item.id));
         }
-        yield chatRooms;
-      }
-    } catch (e, stack) {
-      log("$e $stack");
+        return products;
+      });
+      return ResponseModel.completed(stream);
+    } catch (e) {
+      return ResponseModel.error(
+          'Error listening from listenToLimtedPosts: $e');
     }
   }
 

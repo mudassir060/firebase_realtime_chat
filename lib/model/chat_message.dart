@@ -15,8 +15,8 @@ class ChatMessage {
   final String authorId;
   final DateTime createdOn;
 
-  ChatMessage.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
+  ChatMessage.fromJson(Map<String, dynamic> json, String messageId)
+      : id = messageId,
         url = json['url'],
         text = json['text'],
         type = json['type'],

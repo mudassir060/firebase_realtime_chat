@@ -4,9 +4,6 @@ import 'package:firebase_realtime_chat/firebase_realtime_chat.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_realtime_chat/model/user.dart';
-import 'package:firebase_realtime_chat/views/individual_chat/chat_view.dart';
-import 'package:firebase_realtime_chat/views/individual_chat/chatroom_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,16 +40,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      // home: CommunityChatRoomView(
-      //   imageDownloadButton: true,
-      //   // iconColor: Colors.green,
-      //   // textFieldBorderColor: Colors.green,
-      //   // ownerBubbleColor: const Color.fromARGB(255, 222, 197, 160),
-      //   // otherBubbleColor: Color.fromARGB(255, 146, 202, 210),
-      //   userData: user2,
-      // ),
+      home: CommunityChatRoomView(
+        imageDownloadButton: true,
+        // iconColor: Colors.green,
+        // textFieldBorderColor: Colors.green,
+        // ownerBubbleColor: const Color.fromARGB(255, 222, 197, 160),
+        // otherBubbleColor: Color.fromARGB(255, 146, 202, 210),
+        userData: user2,
+      ),
       // home: OpenChatRoomView(),
-      home: ChatView(userData: user1),
+      // home: ChatView(userData: otherUser),
     );
   }
 }

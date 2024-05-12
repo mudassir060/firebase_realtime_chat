@@ -1,6 +1,7 @@
 import 'package:firebase_realtime_chat/model/chat_message.dart';
 import 'package:firebase_realtime_chat/model/chat_room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_realtime_chat/model/response.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
 import 'package:firebase_realtime_chat/services/extention.dart';
 import 'package:firebase_realtime_chat/services/image_picker_service.dart';
@@ -17,6 +18,7 @@ class ChatRoomViewModel extends BaseViewModel {
   UserModel? senderMember;
   UserModel? receiverMember;
   FocusNode focusNode = FocusNode();
+  List<ChatMessage> messages = [];
 
   bool isShowEmjois = false;
   TextEditingController messageController = TextEditingController();
@@ -25,6 +27,10 @@ class ChatRoomViewModel extends BaseViewModel {
     messageController.text = smsText ?? "";
     this.senderMember = senderMember;
     this.receiverMember = receiverMember;
+    listenToMessages().data?.listen((event) {
+      messages = event;
+      notifyListeners();
+    });
   }
 
   onChanged(e) {
@@ -35,7 +41,9 @@ class ChatRoomViewModel extends BaseViewModel {
     setBusy(true);
     String image =
         await pickImage('CommunityChatRoom', ImageSource.camera, imageQuality);
-    sentFile(url: image);
+    if (image.isNotEmpty) {
+      sentFile(url: image);
+    }
     setBusy(false);
   }
 
@@ -43,7 +51,9 @@ class ChatRoomViewModel extends BaseViewModel {
     setBusy(true);
     String image =
         await pickImage('CommunityChatRoom', ImageSource.gallery, imageQuality);
-    sentFile(url: image);
+    if (image.isNotEmpty) {
+      sentFile(url: image);
+    }
     setBusy(false);
   }
 
@@ -93,6 +103,29 @@ class ChatRoomViewModel extends BaseViewModel {
     await startChatRoom(message, chatRoom);
   }
 
+  ResponseModel<Stream<List<ChatMessage>>> listenToMessages() {
+    try {
+      final stream = _firestore
+          .collection('ChatRooms')
+          .doc(mergeStrings(
+              senderMember?.userId ?? "", receiverMember?.userId ?? ""))
+          .collection('Messages')
+          .orderBy('createdOn', descending: true)
+          .snapshots()
+          .map((event) {
+        List<ChatMessage> products = [];
+        for (var item in event.docs) {
+          products.add(ChatMessage.fromJson(item.data(), item.id));
+        }
+        return products;
+      });
+      return ResponseModel.completed(stream);
+    } catch (e) {
+      return ResponseModel.error(
+          'Error listening from listenToLimtedPosts: $e');
+    }
+  }
+
   Future<void> sendDummyMessage() async {
     ChatMessage dummyMessage = ChatMessage(
       text: messageController.text,
@@ -135,7 +168,6 @@ class ChatRoomViewModel extends BaseViewModel {
   void showDeleteConfirmation(BuildContext context, String messageId) {
     DocumentReference roomRef = _firestore.collection('ChatRooms').doc(
         mergeStrings(senderMember?.userId ?? "", receiverMember?.userId ?? ""));
-
     showDialog(
       context: context,
       builder: (BuildContext context) {

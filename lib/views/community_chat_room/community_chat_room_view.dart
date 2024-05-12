@@ -6,7 +6,6 @@ import 'package:firebase_realtime_chat/widgets.dart/emoji.dart';
 import 'package:firebase_realtime_chat/widgets.dart/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
@@ -47,87 +46,79 @@ class CommunityChatRoomView extends StatelessWidget {
                 title: const Text("Firebase Realtime Chat"),
               ),
           body: SafeArea(
-            child: Column(
+            child: Stack(
               children: [
-                Expanded(
-                  child: StreamBuilder(
-                    stream: viewModel.messagesStream,
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: foundation.defaultTargetPlatform ==
-                                  TargetPlatform.iOS
-                              ? const CupertinoActivityIndicator()
-                              : const CircularProgressIndicator(),
-                        );
-                      }
-                      if (snapshot.hasError) {
-                        return const Text('Something went wrong');
-                      }
-                      return ListView(
-                        reverse: true,
-                        shrinkWrap: true,
-                        children: snapshot.data!.docs
-                            .map((DocumentSnapshot document) {
-                          ChatMessage data = ChatMessage.fromJson(
-                              document.data()! as Map<String, dynamic>,
-                              document.id);
-                          return CommunityChatRoomBubbles(
-                            message: data,
-                            currentUserUID: userData.userId,
-                            defaultImage: defaultImage,
-                            imageDownloadButton: imageDownloadButton,
-                            ownerBubbleColor: ownerBubbleColor,
-                            otherBubbleColor: otherBubbleColor,
-                          );
-                        }).toList(),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Textfield(
-                    title: "Type a message...",
-                    ctrl: viewModel.messageController,
-                    borderColor: textFieldBorderColor,
-                    onChanged: viewModel.onChanged,
-                    focusNode: viewModel.focusNode,
-                    prefixIcon: GestureDetector(
-                      onTap: viewModel.showEmojis,
-                      child: Icon(Icons.emoji_emotions_outlined,
-                          size: 32, color: iconColor),
+                Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          reverse: true,
+                          itemCount: viewModel.messages.length,
+                          itemBuilder: (context, index) {
+                            ChatMessage message = viewModel.messages[index];
+                            return CommunityChatRoomBubbles(
+                              message: message,
+                              currentUserUID: userData.userId,
+                              defaultImage: defaultImage,
+                              imageDownloadButton: imageDownloadButton,
+                              ownerBubbleColor: ownerBubbleColor,
+                              otherBubbleColor: otherBubbleColor,
+                            );
+                          }),
                     ),
-                    sufixIcon: viewModel.messageController.text.isNotEmpty
-                        ? GestureDetector(
-                            onTap: viewModel.sendMessage,
-                            child: Icon(Icons.send, size: 18, color: iconColor),
-                          )
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  viewModel.sentGalleryImage(imageQuality);
-                                },
-                                child: Icon(Icons.attach_file,
-                                    size: 25, color: iconColor),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Textfield(
+                        title: "Type a message...",
+                        ctrl: viewModel.messageController,
+                        borderColor: textFieldBorderColor,
+                        onChanged: viewModel.onChanged,
+                        focusNode: viewModel.focusNode,
+                        prefixIcon: GestureDetector(
+                          onTap: viewModel.showEmojis,
+                          child: Icon(Icons.emoji_emotions_outlined,
+                              size: 32, color: iconColor),
+                        ),
+                        sufixIcon: viewModel.messageController.text.isNotEmpty
+                            ? GestureDetector(
+                                onTap: viewModel.sendMessage,
+                                child: Icon(Icons.send,
+                                    size: 18, color: iconColor),
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      viewModel.sentGalleryImage(imageQuality);
+                                    },
+                                    child: Icon(Icons.attach_file,
+                                        size: 25, color: iconColor),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () {
+                                      viewModel.sentCameraImage(imageQuality);
+                                    },
+                                    child: Icon(Icons.camera_alt,
+                                        size: 28, color: iconColor),
+                                  ),
+                                  const SizedBox(width: 10),
+                                ],
                               ),
-                              const SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () {
-                                  viewModel.sentCameraImage(imageQuality);
-                                },
-                                child: Icon(Icons.camera_alt,
-                                    size: 28, color: iconColor),
-                              ),
-                              const SizedBox(width: 10),
-                            ],
-                          ),
-                  ),
+                      ),
+                    ),
+                    if (viewModel.isShowEmjois)
+                      EmojiKeyboard(onSelecte: viewModel.sentEmojis)
+                  ],
                 ),
-                if (viewModel.isShowEmjois)
-                  EmojiKeyboard(onSelecte: viewModel.sentEmojis)
+                if (viewModel.isBusy)
+                  Center(
+                    child:
+                        foundation.defaultTargetPlatform == TargetPlatform.iOS
+                            ? const CupertinoActivityIndicator()
+                            : const CircularProgressIndicator(),
+                  ),
               ],
             ),
           ),
