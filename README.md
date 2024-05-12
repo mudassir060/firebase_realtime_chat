@@ -11,6 +11,7 @@ This Flutter package provides an easy-to-use solution for integrating real-time 
 - **Emoji Support:** Users can send emoji text messages.
 - **Customizable UI:** Customize chat bubbles, text fields, and app bars to match your app's design.
 
+<img src="https://raw.githubusercontent.com/TechProgression/DateTimePikerUltra/main/assest/1.gif" width="200" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/TechProgression/DateTimePikerUltra/main/assest/2.gif" width="200" />
 
 #### Installation:
 To use this package in your Flutter project, add it to your pubspec.yaml file:
