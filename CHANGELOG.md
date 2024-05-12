@@ -1,3 +1,3 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* TODO: Real-time chat integration using Firebase Firestore for private and community chat rooms with customizable UI options..
