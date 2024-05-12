@@ -9,9 +9,10 @@ This Flutter package provides an easy-to-use solution for integrating real-time 
 - **Private Chat:** Enables users to engage in one-on-one private conversations.
 - **Image Support:** Users can share images within chats.
 - **Emoji Support:** Users can send emoji text messages.
+- **Delete Messages:** Users can delete their sent messages.
 - **Customizable UI:** Customize chat bubbles, text fields, and app bars to match your app's design.
 
-<img src="https://raw.githubusercontent.com/TechProgression/DateTimePikerUltra/main/assest/1.gif" width="200" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/TechProgression/DateTimePikerUltra/main/assest/2.gif" width="200" />
+<img src="https://raw.githubusercontent.com/mudassir060/firebase_realtime_chat/main/assets/1.gif" width="250" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/mudassir060/firebase_realtime_chat/main/assets/2.gif" width="250" />
 
 #### Installation:
 To use this package in your Flutter project, add it to your pubspec.yaml file:
