@@ -77,7 +77,8 @@ Then, run `flutter pub get` to install the package.
 - **ownerBubbleColor (Color):** Color of chat bubbles for messages sent by the current user.
 - **otherBubbleColor (Color):** Color of chat bubbles for messages sent by other users.
 
-### CommunityChatRoomView(
+### Community ChatRoom:
+    CommunityChatRoomView(
       userData: UserModel,
       textFieldBorderColor: Colors.blue,
       defaultImage: "https://github.com/mudassir060/firebase_realtime_chat/blob/main/assets/profile.jpeg?raw=true",

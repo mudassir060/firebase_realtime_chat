@@ -1,5 +1,5 @@
 name: firebase_realtime_chat
-description: "A new Flutter project."
+description: "This Flutter package simplifies real-time chat integration using Firebase Firestore for private and community chat rooms with customizable UI options."
 version: 0.0.1
 homepage: https://github.com/mudassir060/firebase_realtime_chat.git
 
