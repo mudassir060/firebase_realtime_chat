@@ -1,6 +1,6 @@
 name: firebase_realtime_chat
 description: "This Flutter package simplifies real-time chat integration using Firebase Firestore for private and community chat rooms with customizable UI options."
-version: 0.0.1
+version: 0.0.3
 homepage: https://github.com/mudassir060/firebase_realtime_chat.git
 
 environment:
@@ -15,7 +15,7 @@ dependencies:
   fluttertoast: ^8.2.5
   gallery_saver: ^2.3.2
   http: ^0.13.6
-  image_picker: ^1.0.8
+  image_picker: ^0.8.9
   lottie: ^3.0.0
   path_provider: ^2.1.3
   permission_handler: ^11.3.1
