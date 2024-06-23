@@ -16,14 +16,14 @@ class CommunityChatRoomBubbles
   final bool imageDownloadButton;
 
   const CommunityChatRoomBubbles({
-    Key? key,
+    super.key,
     required this.ownerBubbleColor,
     required this.otherBubbleColor,
     required this.message,
     required this.currentUserUID,
     required this.defaultImage,
     this.imageDownloadButton = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(

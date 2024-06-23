@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:developer';
-import 'package:firebase_realtime_chat/services/snakBar.dart';
+import 'package:firebase_realtime_chat/services/snak_bar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';

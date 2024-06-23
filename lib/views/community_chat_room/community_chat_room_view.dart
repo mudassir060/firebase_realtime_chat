@@ -20,7 +20,7 @@ class CommunityChatRoomView extends StatelessWidget {
   final Color ownerBubbleColor;
   final Color otherBubbleColor;
   const CommunityChatRoomView({
-    Key? key,
+    super.key,
     required this.userData,
     this.textFieldBorderColor = Colors.blue,
     this.defaultImage =
@@ -31,7 +31,7 @@ class CommunityChatRoomView extends StatelessWidget {
     this.imageDownloadButton = false,
     this.ownerBubbleColor = const Color.fromARGB(255, 199, 249, 245),
     this.otherBubbleColor = const Color.fromARGB(255, 250, 236, 193),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

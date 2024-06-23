@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'package:firebase_realtime_chat/firebase_realtime_chat.dart';
+import 'package:firebase_realtime_chat/services/user_status.dart';
 
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  UserStatusService();
+
+  runApp(const MyApp());
 }
 
 UserModel user1 = UserModel(
@@ -34,7 +37,7 @@ UserModel otherUser = UserModel(
 );
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

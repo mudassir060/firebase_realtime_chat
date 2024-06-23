@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chatroom_viewmodel.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/widgets/bubbles.dart';
@@ -22,7 +23,7 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
   final Color otherBubbleColor;
 
   const ChatRoomView({
-    Key? key,
+    super.key,
     required this.senderMember,
     required this.receiverMember,
     this.smsText,
@@ -35,7 +36,7 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
     this.imageDownloadButton = false,
     this.ownerBubbleColor = const Color.fromARGB(255, 199, 249, 245),
     this.otherBubbleColor = const Color.fromARGB(255, 250, 236, 193),
-  }) : super(key: key);
+  });
 
   @override
   Widget builder(
@@ -46,9 +47,38 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(
-          receiverMember.name,
-          style: const TextStyle(color: Colors.black),
+        title: Column(
+          children: [
+            Text(
+              receiverMember.name,
+              style: const TextStyle(color: Colors.black),
+            ),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc("friendId")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var userDoc = snapshot.data!;
+                    var userData = userDoc.data();
+                    bool isOnline = false;
+                    if (userData is Map<String, dynamic>) {
+                      isOnline = userData['isOnline'] ?? false;
+                    }
+                    return isOnline
+                        ? const Text(
+                            'Online',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 12,
+                            ),
+                          )
+                        : const SizedBox.shrink();
+                  }
+                  return Container();
+                })
+          ],
         ),
       ),
       body: Stack(

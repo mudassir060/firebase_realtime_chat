@@ -8,10 +8,10 @@ class ImageView extends StackedView<ImageViewModel> {
   final bool imageDownloadButton;
 
   const ImageView({
-    Key? key,
+    super.key,
     required this.url,
     required this.imageDownloadButton,
-  }) : super(key: key);
+  });
 
   @override
   Widget builder(

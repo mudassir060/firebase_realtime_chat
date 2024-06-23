@@ -14,7 +14,7 @@ class Textfield extends StatefulWidget {
   final Function(String)? onChanged;
   final FocusNode? focusNode;
   const Textfield({
-    Key? key,
+    super.key,
     this.title,
     this.ctrl,
     this.obscureText,
@@ -26,7 +26,7 @@ class Textfield extends StatefulWidget {
     this.keyboardType,
     this.onChanged,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   State<Textfield> createState() => _TextfieldState();

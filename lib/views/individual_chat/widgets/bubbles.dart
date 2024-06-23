@@ -15,14 +15,14 @@ class ChatRoomBubbles extends ViewModelWidget<ChatRoomViewModel> {
   final bool imageDownloadButton;
 
   const ChatRoomBubbles({
-    Key? key,
+    super.key,
     required this.ownerBubbleColor,
     required this.otherBubbleColor,
     required this.message,
     required this.currentUserUID,
     required this.defaultImage,
     this.imageDownloadButton = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(

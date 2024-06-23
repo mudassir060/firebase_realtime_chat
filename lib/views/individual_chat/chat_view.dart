@@ -20,7 +20,7 @@ class ChatView extends StackedView<ChatViewModel> {
   final Color otherBubbleColor;
 
   const ChatView({
-    Key? key,
+    super.key,
     required this.userData,
     this.iconColor = Colors.grey,
     this.textFieldBorderColor = Colors.blue,
@@ -31,7 +31,7 @@ class ChatView extends StackedView<ChatViewModel> {
     this.imageDownloadButton = false,
     this.ownerBubbleColor = const Color.fromARGB(255, 199, 249, 245),
     this.otherBubbleColor = const Color.fromARGB(255, 250, 236, 193),
-  }) : super(key: key);
+  });
 
   @override
   Widget builder(
