@@ -26,6 +26,11 @@ Then, run `flutter pub get` to install the package.
 
     import 'package:firebase_realtime_chat/firebase_realtime_chat.dart';
 
+##### Status Update:
+###### Call this line in the app's main function after Firebase initializes for auto-update states online or offline:
+
+      UserStatusService();
+
 ### Private Chat:
     ChatView(
       userData: UserModel,

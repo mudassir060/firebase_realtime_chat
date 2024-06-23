@@ -11,6 +11,9 @@ import 'package:stacked/stacked.dart';
 
 class ChatRoomViewModel extends BaseViewModel {
   final _firestore = FirebaseFirestore.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // String? get uId => _auth.currentUser?.uid;
+
   // final CollectionReference _messagesCollection = FirebaseFirestore.instance
   //     .collection('ChatRooms')
   //     .doc("senderIdreceiverId")

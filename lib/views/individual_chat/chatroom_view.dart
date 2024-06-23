@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_realtime_chat/model/user.dart';
+import 'package:firebase_realtime_chat/services/extention.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/chatroom_viewmodel.dart';
 import 'package:firebase_realtime_chat/views/individual_chat/widgets/bubbles.dart';
 import 'package:firebase_realtime_chat/widgets.dart/emoji.dart';
@@ -48,6 +49,7 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               receiverMember.name,
@@ -55,26 +57,30 @@ class ChatRoomView extends StackedView<ChatRoomViewModel> {
             ),
             StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc("friendId")
+                    .collection('status')
+                    .doc(receiverMember.userId)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var userDoc = snapshot.data!;
                     var userData = userDoc.data();
                     bool isOnline = false;
+                    String lastSeen = '';
                     if (userData is Map<String, dynamic>) {
                       isOnline = userData['isOnline'] ?? false;
+                      if (userData['lastSeen'] != null) {
+                        lastSeen = timeAgo(userData['lastSeen'].toDate());
+                      } else {
+                        lastSeen = '';
+                      }
                     }
-                    return isOnline
-                        ? const Text(
-                            'Online',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 12,
-                            ),
-                          )
-                        : const SizedBox.shrink();
+                    return Text(
+                      isOnline ? 'Online' : lastSeen,
+                      style: TextStyle(
+                        color: isOnline ? Colors.green : Colors.grey,
+                        fontSize: 12,
+                      ),
+                    );
                   }
                   return Container();
                 })

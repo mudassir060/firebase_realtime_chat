@@ -21,7 +21,7 @@ class UserStatusService extends WidgetsBindingObserver {
         .onConnectivityChanged
         .listen((List<ConnectivityResult> result) {
       if (_auth.currentUser != null) {
-        setUserStatus(result.isEmpty);
+        setUserStatus(!result.contains(ConnectivityResult.none));
       }
     });
   }
@@ -29,10 +29,20 @@ class UserStatusService extends WidgetsBindingObserver {
   Future<void> setUserStatus(bool isOnline) async {
     User? user = _auth.currentUser;
     if (user != null) {
-      await _firestore.collection('users').doc(user.uid).update({
-        'isOnline': isOnline,
-        'lastSeen': FieldValue.serverTimestamp(),
-      });
+      DocumentReference docRef = _firestore.collection('status').doc(user.uid);
+      DocumentSnapshot docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        await docRef.update({
+          'isOnline': isOnline,
+          'lastSeen': FieldValue.serverTimestamp(),
+        });
+      } else {
+        await docRef.set({
+          'isOnline': isOnline,
+          'lastSeen': FieldValue.serverTimestamp(),
+        });
+      }
     }
   }
 
