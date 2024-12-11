@@ -9,6 +9,10 @@
 
 *  Downgrade `image_picker: ^1.0.8` To `image_picker: ^0.8.9`
 
-## 0.0.3
+## 0.0.4
 
 *  Add `Online Status feature` And `Upgrade packages`
+
+## 0.0.5
+
+*  `Upgrade packages`
